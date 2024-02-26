@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# If the commit message is empty, or if it only contains whitespace, then do nothing
+if [ -z "$1" ] || [ "$(echo "$1" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')" = "" ]; then
+    exit 0
+fi
+
+# Check if the commit message already starts with "JIRAKEY: "
+case "$1" in
+    JIRAKEY:*)
+        # If it does, do nothing
+        ;;
+    *)
+        # If it doesn't, prepend "JIRAKEY: " to the commit message
+        sed -i.bak '1s/^/JIRAKEY: /' "$1"
+        ;;
+esac
+
+# Make the script executable by running: 
+# Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+# cd .\.git\hooks
+# .\prepare-commit-msg
+# chmod +x prepare-commit-msg
